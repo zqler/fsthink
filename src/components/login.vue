@@ -25,6 +25,9 @@
 <script>
 import http from "../utils/http";
 import api from "../utils/api";
+import util from "../utils/util";
+import { mapState } from "vuex";
+import * as types from "../store/types";
 export default {
   name: "login",
   data() {
@@ -44,6 +47,10 @@ export default {
   },
   mounted: function() {
     //  this.fetchData();
+    this.$store.commit(types.TITLE, "login");
+  },
+  computed: {
+    ...mapState(["aesKey"])
   },
   methods: {
     accountChange() {
@@ -57,12 +64,29 @@ export default {
           var user = {};
           user.name = _this.user.account;
           user.pwd = _this.user.pass;
-
+          // if (this.token) {
+          //   this.$store.commit(types.LOGIN, this.token);
+          //   let redirect = decodeURIComponent(
+          //     this.$route.query.redirect || "/"
+          //   );
+          //   this.$router.push({
+          //     path: redirect
+          //   });
+          // }
           http.post("/login.php", user).then(res => {
             var data = res.data;
             if (data == 0) {
               this.tip = "登录成功";
-              this.$router.push({name:'home'})
+              user.PassWord = util.encryAES(user.PassWord, _this.aesKey);
+              util.setStorage({ key: "USER_INFO_KEY", data: user }, true);
+              this.$store.commit(types.LOGIN, 1);
+              let redirect = decodeURIComponent(
+                this.$route.query.redirect || "/"
+              );
+              this.$router.push({
+                //你需要接受路由的参数再跳转
+                path: redirect
+              });
             } else if (data == 1) {
               this.tip = "密码错误";
             } else if (data == 2) {
@@ -82,9 +106,9 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-.h-title{
+.h-title {
   font-size: 16px;
-  color:#ff4949;
+  color: #ff4949;
   margin: 10px 0;
 }
 .login-page {

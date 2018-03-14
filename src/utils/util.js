@@ -1,10 +1,9 @@
-import MD5 from "crypto-js/md5";
 import * as _ from "lodash";
+import MD5 from "crypto-js/md5";
+import AES from "crypto-js/aes";
+import utf8 from "crypto-js/enc-utf8";
 var SIGN_REGEXP = /([yMdhsm])(\1*)/g;
-var DEFAULT_PATTRERE = "yy-MM-dd hh:mm:ss";
-encryMD5: function(v) {
-    return MD5(v).toString();
-}
+var DEFAULT_PATTERN = "yyyy-MM-dd hh:mm:ss";
 
 function padding(s, len) {
     var len = len - (s + "").length;
@@ -16,18 +15,16 @@ function padding(s, len) {
 
 function extend(target, source, deep) {
     var k;
-    for (k in source) {
+    for (k in source)
         if (deep && (_.isPlainObject(source[k]) || _.isArray(source[k]))) {
             if (_.isPlainObject(source[k]) && !_.isPlainObject(target[k]))
                 target[k] = {};
             if (_.isArray(source[k]) && !_.isArray(target[k])) target[k] = [];
             extend(target[k], source[k], deep);
         } else if (source[k] !== undefined) target[k] = source[k];
-
-    }
 }
 
-function toJson(data) {
+function toJSON(data) {
     try {
         return JSON.parse(data);
     } catch (er) {
@@ -43,15 +40,17 @@ export default {
         if (r != null) context = r[2];
         reg = null;
         r = null;
-        return context == null || context == "" || context == undefined ? "" : context;
-    }
+        return context == null || context == "" || context == "undefined" ?
+            "" :
+            context;
+    },
     formatDate: {
         format: function(date, pattern) {
             if (!date) {
                 return "";
             }
-            data = new Date(date);
-            pattern = parttern || DEFAULT_PATTRERE;
+            date = new Date(date);
+            pattern = pattern || DEFAULT_PATTERN;
             return pattern.replace(SIGN_REGEXP, function($0) {
                 switch ($0.charAt(0)) {
                     case "y":
@@ -103,89 +102,107 @@ export default {
                 return _date;
             }
             return null;
-        },
-        setStorage: function(data, fresh) {
-            if (!data || !data.key) {
-                return;
-            }
-            const oldData = toJson(localStorage.getItem(data.key));
-            if (!fresh && oldData) {
-                const time = oldData.time;
-                const express = oldData.express;
-                if (new Date(time + express) < Date().now()) {
-                    return true;
-                }
-            }
-            localStorage.setItem(
-                data.key,
-                JSON.stringify({
-                    data: data.data,
-                    time: Date.now(),
-                    express: data.express || 3600000 //设置过期时间
-                })
-            )
-        },
-        getStorage: function(key, timeout) {
-            if (!key) {
-                return;
-            }
-            let oldData = toJson(localStorage.getItem(key));
-            if (oldData) {
-                const time = oldData.time;
-                const express = oldData.express;
-                if (timeout) {
-                    return oldData.data;
-                }
-                if (new Date(time + express) > Date.now()) {
-                    return oldData.data;
-                } else {
-                    return false;
-                }
-            }
-            return false;
-        },
-        toJSON: function(data) {
-            const result = toJson(data);
-            if (!result) {
-                return { errcode: 1, errmsg: "数据异常" };
-            }
-            return result;
-        },
-        findIndex: function(list, key, value) {
-            if (list) {
-                return list.findIndex(function(item) {
-                    return item[key] == value;
-                });
-            }
-            return -1;
-        },
-        find: function(list, key, value) {
-            if (list) {
-                const index = this.findIndex(list, key, value);
-                return list[index];
-            }
-            ruturn[];
-        },
-        restObject: function(obj) {
-            if (typeof obj == "object" && obj !== null) {
-                const keys = Object.keys(obj); //Object.keys 返回对象自身可以枚举属性组成的数组
-                let key;
-                for (key in keys) {
-                    obj[keys[key]] = "";
-                }
-            }
-        },
-        assign: function(target) {
-            var deep,
-                args = Array.prototype.slice.call(arguments, 1);
-            if (typeof target == "boolean") {
-                deep = target;
-                target = args.shift();
-            }
-            args.forEach(function(arg) {
-                extend(target, arg, deep);
-            })
-            return target;
         }
+    },
+    setStorage: function(data, fresh) {
+        if (!data || !data.key) {
+            return;
+        }
+        const oldData = toJSON(localStore.getItem(data.key));
+        if (!fresh && oldData) {
+            const time = oldData.time;
+            const express = oldData.express;
+            if (new Date(time + express) < Date.now()) {
+                return true;
+            }
+        }
+        localStore.setItem(
+            data.key,
+            JSON.stringify({
+                data: data.data,
+                time: Date.now(),
+                express: data.express || 3600000
+            })
+        );
+    },
+    getStorage: function(key, timeout) {
+        if (!key) {
+            return;
+        }
+        let oldData = toJSON(localStore.getItem(key));
+        if (oldData) {
+            const time = oldData.time;
+            const express = oldData.express;
+            if (timeout) {
+                return oldData.data;
+            }
+            if (new Date(time + express) > Date.now()) {
+                return oldData.data;
+            } else {
+                return false;
+            }
+        }
+        return false;
+    },
+    toJSON: function(data) {
+        const result = toJSON(data);
+        if (!result) {
+            return { errcode: 1, errmsg: "数据异常" };
+        }
+        return result;
+    },
+    findIndex: function(list, key, value) {
+        if (list) {
+            return list.findIndex(function(item) {
+                return item[key] == value;
+            });
+        }
+        return -1;
+    },
+    find: function(list, key, value) {
+        if (list) {
+            const index = this.findIndex(list, key, value);
+            return list[index];
+        }
+        return [];
+    },
+    restObject: function(obj) {
+        if (typeof obj == "object" && obj != null) {
+            const keys = Object.keys(obj);
+            let key;
+            for (key in keys) {
+                obj[keys[key]] = "";
+            }
+        }
+    },
+    // zepto extend method;
+    assign: function(target) {
+        var deep,
+            args = Array.prototype.slice.call(arguments, 1);
+        if (typeof target == "boolean") {
+            deep = target;
+            target = args.shift();
+        }
+        args.forEach(function(arg) {
+            extend(target, arg, deep);
+        });
+        return target;
+    },
+    encryMD5: function(v) {
+        return MD5(v).toString();
+    },
+    /**
+     * @param v value
+     * @param k password
+     */
+    encryAES: function(v, k) {
+        return AES.encrypt(v, k, {}).toString();
+    },
+    /**
+     * @param v value
+     * @param p password
+     */
+    decryAES: function(v, k) {
+        return AES.decrypt(v, k, {}).toString(utf8);
     }
-}
+};

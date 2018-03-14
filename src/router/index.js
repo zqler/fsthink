@@ -5,7 +5,8 @@ import login from "@/components/login";
 import NotFound from "@/components/NotFound";
 import register from "@/components/register";
 import home from "@/components/index";
-import vuex from "vuex"
+import List from "@/components/list";
+import vuex from "vuex";
 Vue.use(Router);
 Vue.use(vuex);
 const router = new Router({
@@ -37,6 +38,15 @@ const router = new Router({
             }
         },
         {
+            path: "/list",
+            name: "List",
+            component: List,
+            meta: {
+                title: "视频列表页",
+                requireAuth: true
+            }
+        },
+        {
             path: "/404",
             name: "Error",
             component: NotFound,
@@ -59,15 +69,23 @@ router.beforeEach((to, from, next) => {
         });
     }
     if (to.matched.some(r => r.meta.requireAuth)) {
-        if (store.state.token) {
-            // 通过vuex state获取当前的token是否存在
+        if (router.app.$store.state.isLogin) {
             next();
         } else {
-            next({
-                path: "/login",
-                query: { redirect: to.fullPath } // 将跳转的路由path作为参数，登录成功后跳转到该路由
-            });
+            const token = sessionStorage.getItem("token");
+            console.log(token);
+            if (token) {
+                // 通过vuex state获取当前的token是否存在
+                next();
+            } else {
+                next({
+                    path: "/login",
+                    query: { redirect: encodeURIComponent(to.path) } // 将跳转的路由path作为参数，登录成功后跳转到该路由
+                });
+            }
         }
+    } else {
+        next();
     }
 });
 export default router;
