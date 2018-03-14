@@ -1,12 +1,13 @@
 import Vue from "vue";
 import Router from "vue-router";
+import store from "@/store/store";
 import login from "@/components/login";
 import NotFound from "@/components/NotFound";
 import register from "@/components/register";
 import home from "@/components/index";
 import vuex from "vuex"
 Vue.use(Router);
-
+Vue.use(vuex);
 const router = new Router({
     // 默认值: “/”，应用的基路径，一般就是项目的根目录，webpack中有配置好。
     linkActiveClass: "link-active",
@@ -58,7 +59,15 @@ router.beforeEach((to, from, next) => {
         });
     }
     if (to.matched.some(r => r.meta.requireAuth)) {
-
+        if (store.state.token) {
+            // 通过vuex state获取当前的token是否存在
+            next();
+        } else {
+            next({
+                path: "/login",
+                query: { redirect: to.fullPath } // 将跳转的路由path作为参数，登录成功后跳转到该路由
+            });
+        }
     }
 });
 export default router;

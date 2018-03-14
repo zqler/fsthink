@@ -168,13 +168,24 @@ export default {
         },
         restObject: function(obj) {
             if (typeof obj == "object" && obj !== null) {
-                const keys = Object.keys(obj);
+                const keys = Object.keys(obj); //Object.keys 返回对象自身可以枚举属性组成的数组
                 let key;
                 for (key in keys) {
                     obj[keys[key]] = "";
                 }
             }
         },
-
+        assign: function(target) {
+            var deep,
+                args = Array.prototype.slice.call(arguments, 1);
+            if (typeof target == "boolean") {
+                deep = target;
+                target = args.shift();
+            }
+            args.forEach(function(arg) {
+                extend(target, arg, deep);
+            })
+            return target;
+        }
     }
 }
