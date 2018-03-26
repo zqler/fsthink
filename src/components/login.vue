@@ -73,8 +73,9 @@ export default {
           //     path: redirect
           //   });
           // }
-          http.post("/login.php", user).then(res => {
-            var data = res.data;
+          http.post("/login", user).then(res => {
+            var data = res.data.errcode;
+            console.log(res);
             if (data == 0) {
               this.tip = "登录成功";
               user.PassWord = util.encryAES(user.PassWord, _this.aesKey);

@@ -53,7 +53,7 @@ export default {
     post(url, data) {
         return axios({
                 method: "post",
-                baseURL: "http://localhost:8080/apis",
+                baseURL: "http://localhost:8080/api",
                 url,
                 data: qs.stringify(data),
                 timeout: 10000,

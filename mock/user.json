@@ -1,0 +1,11 @@
+{
+    "errcode": 0,
+    "errmsg": "ok",
+    "error": 0,
+    "resultData": {
+        "AdminID": 1,
+        "NikeName": "wenruo",
+        "SuperAdmin": 1,
+        "UserToken": "wexxasff"
+    }
+}
