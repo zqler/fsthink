@@ -23,7 +23,6 @@
   </div>
 </template>
 <script>
-import http from "../utils/http";
 import api from "../utils/api";
 import util from "../utils/util";
 import { mapState } from "vuex";
@@ -64,23 +63,14 @@ export default {
           var user = {};
           user.name = _this.user.account;
           user.pwd = _this.user.pass;
-          // if (this.token) {
-          //   this.$store.commit(types.LOGIN, this.token);
-          //   let redirect = decodeURIComponent(
-          //     this.$route.query.redirect || "/"
-          //   );
-          //   this.$router.push({
-          //     path: redirect
-          //   });
-          // }
-          http.post("/login", user).then(res => {
-            var data = res.data.errcode;
-            console.log(res);
-            if (data == 0) {
+          this.$http.post("/login", user).then(data => {
+            const code = data.errcode;
+            const UserToken = data.resultData.UserToken;
+            if (code == 0) {
               this.tip = "登录成功";
               user.PassWord = util.encryAES(user.PassWord, _this.aesKey);
               util.setStorage({ key: "USER_INFO_KEY", data: user }, true);
-              this.$store.commit(types.LOGIN, 1);
+              this.$store.commit(types.LOGIN, UserToken);
               let redirect = decodeURIComponent(
                 this.$route.query.redirect || "/"
               );
@@ -88,9 +78,9 @@ export default {
                 //你需要接受路由的参数再跳转
                 path: redirect
               });
-            } else if (data == 1) {
+            } else if (code == 1) {
               this.tip = "密码错误";
-            } else if (data == 2) {
+            } else if (code == 2) {
               this.tip = "用户名不存在";
             } else {
               this.tip = "用户名密码错误";

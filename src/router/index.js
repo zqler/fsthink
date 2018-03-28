@@ -73,7 +73,6 @@ router.beforeEach((to, from, next) => {
             next();
         } else {
             const token = sessionStorage.getItem("token");
-            console.log(token);
             if (token) {
                 // 通过vuex state获取当前的token是否存在
                 next();
