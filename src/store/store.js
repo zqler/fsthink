@@ -1,10 +1,11 @@
 import Vuex from "vuex";
 import Vue from "vue";
-import * as types from "./types";
-
+import { login } from "./types/login";
+import actions from "./actions";
 Vue.use(Vuex);
 const save = store => {};
 export default new Vuex.Store({
+    actions,
     state: {
         user: {},
         token: null,
@@ -14,20 +15,21 @@ export default new Vuex.Store({
     },
 
     mutations: {
-        [types.LOGIN]: (state, data) => {
+        [login.LOGIN_SUCCESS]: (state, data) => {
             state.isLogin = true;
-            sessionStorage.token = data;
+            sessionStorage.token = data.UserToken;
             sessionStorage.isLogin = state.isLogin;
-            state.token = data;
+            state.token = data.UserToken;
         },
-        [types.LOGOUT]: state => {
+        [login.LOGIN_FAIL](state, data) {
+            state.loginInfo.isSuccess = true;
+            state.loginInfo.msg = data.errmsg;
+        },
+        [login.LOGOUT]: state => {
             sessionStorage.removeItem("token");
             sessionStorage.removeItem("isLogin");
             state.token = null;
             state.isLogin = false;
-        },
-        [types.TITLE]: (state, data) => {
-            state.title = data;
         }
     }
 });

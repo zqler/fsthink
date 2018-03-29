@@ -10,11 +10,14 @@ import router from "../router/index";
 //axios 配置
 axios.defaults.timeout = 5000;
 axios.defaults.baseURL = "/api";
+axios.defaults.headers["Content-Type"] =
+    "application/x-www-form-urlencoded;charset=UTF-8";
 //http request 拦截器
 axios.interceptors.request.use(
     config => {
         // loading
         //判断是否存在存在token,存在就加在http header
+
         if (store.state.token) {
             config.headers.Authorization = `token ${store.state.token}`;
         }
@@ -49,7 +52,7 @@ axios.interceptors.response.use(
 );
 
 const http = {};
-["get", "head", "jsonp", "jsonp"].forEach(method => {
+["get", "head", "jsonp", "delete"].forEach(method => {
     http[method] = function(url, params = {}) {
         return new Promise((resolve, reject) => {
             axios[method](url, { params: params })

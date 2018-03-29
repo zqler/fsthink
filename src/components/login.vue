@@ -26,7 +26,7 @@
 import api from "../utils/api";
 import util from "../utils/util";
 import { mapState } from "vuex";
-import * as types from "../store/types";
+import { login } from "../store/types/login";
 export default {
   name: "login",
   data() {
@@ -46,7 +46,7 @@ export default {
   },
   mounted: function() {
     //  this.fetchData();
-    this.$store.commit(types.TITLE, "login");
+    // this.$store.commit(types.TITLE, "login");
   },
   computed: {
     ...mapState(["aesKey"])
@@ -63,31 +63,50 @@ export default {
           var user = {};
           user.name = _this.user.account;
           user.pwd = _this.user.pass;
-          this.$http.post("/login", user).then(data => {
-            const code = data.errcode;
-            const UserToken = data.resultData.UserToken;
-            if (code == 0) {
-              this.tip = "登录成功";
+          _this.$store.dispatch(login.LOGIN, user).then(
+            data => {
               user.PassWord = util.encryAES(user.PassWord, _this.aesKey);
-              util.setStorage({ key: "USER_INFO_KEY", data: user }, true);
-              this.$store.commit(types.LOGIN, UserToken);
+              const express = 3600;
+              util.setStorage(
+                { key: "USER_INFO_KEY", data: user, express: express },
+                true
+              );
               let redirect = decodeURIComponent(
-                this.$route.query.redirect || "/"
+                _this.$route.query.redirect || "/"
               );
               this.$router.push({
                 //你需要接受路由的参数再跳转
                 path: redirect
               });
-            } else if (code == 1) {
-              this.tip = "密码错误";
-            } else if (code == 2) {
-              this.tip = "用户名不存在";
-            } else {
-              this.tip = "用户名密码错误";
+            },
+            () => {
+              console.info("fail");
             }
-          });
-        } else {
-          this.tip = "用户名或者密码不能为空";
+          );
+
+          // this.$http.post("/login", user).then(data => {
+          //   const code = data.errcode;
+          //   const UserToken = data.resultData.UserToken;
+          //   if (code == 0) {
+          //     this.tip = "登录成功";
+          //     user.PassWord = util.encryAES(user.PassWord, _this.aesKey);
+          //     util.setStorage({ key: "USER_INFO_KEY", data: user }, true);
+          //     this.$store.commit(types.LOGIN, UserToken);
+          //     let redirect = decodeURIComponent(
+          //       this.$route.query.redirect || "/"
+          //     );
+          //     this.$router.push({
+          //       //你需要接受路由的参数再跳转
+          //       path: redirect
+          //     });
+          //   } else if (code == 1) {
+          //     this.tip = "密码错误";
+          //   } else if (code == 2) {
+          //     this.tip = "用户名不存在";
+          //   } else {
+          //     this.tip = "用户名密码错误";
+          //   }
+          // });
         }
       });
     }

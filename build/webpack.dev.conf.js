@@ -11,9 +11,11 @@ const portfinder = require("portfinder");
 const express = require("express");
 const app = express();
 const router = express.Router();
+var bodyPaeser = require("body-parser");
 app.use("/api", router);
 const user = require("../mock/user.json");
-
+const usersList = require("../mock/userslist.json");
+app.use(bodyPaeser.urlencoded({ extended: false }));
 const HOST = process.env.HOST;
 const PORT = process.env.PORT && Number(process.env.PORT);
 
@@ -49,15 +51,27 @@ const devWebpackConfig = merge(baseWebpackConfig, {
         before(app) {
             app.use(function(req, res, next) {
                 var s =
-                    "[" + Date.now() + "] :" + req.url + ";" + req.header("UserToken");
+                    "[" +
+                    Date.now() +
+                    "] :" +
+                    req.url +
+                    ";" +
+                    req.header("Authorization");
                 console.info(s);
                 next();
             });
             app.post("/api/login", function(req, res) {
+                // let name = req.body.name;
+                // let passWord = req.body.pwd;
+                // console.info("[Login] name:" + name + " password: " + passWord);
+                console.info(req.body);
                 res.json(user);
             });
             app.get("/api/loginOut", function(req, res) {
                 res.json(user);
+            });
+            app.get("/api/usersList", function(req, res) {
+                res.json(usersList);
             });
         }
     },

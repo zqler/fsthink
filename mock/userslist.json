@@ -1,0 +1,51 @@
+{
+    "errcode": 0,
+    "errmsg": "ok",
+    "error": 0,
+    "resultData": {
+        "title": "测试标题",
+        "list": [{
+                "AdminID": 1,
+                "EndTime": "2016-12-21 12:12:11",
+                "FactoryName": "sdf",
+                "GameID": 1,
+                "GameToken": 1,
+                "JoinNum": 0,
+                "MaxJoinNum": 0,
+                "NickName": "管理员",
+                "StartTime": "2016-12-21 12:12:11",
+                "State": 1,
+                "Versions": 1,
+                "VersionsName": "版本名字"
+            },
+            {
+                "AdminID": 1,
+                "EndTime": "2016-12-21 12:12:11",
+                "FactoryName": "sdf",
+                "GameID": 1,
+                "GameToken": 1,
+                "JoinNum": 0,
+                "MaxJoinNum": 0,
+                "NickName": "管理员",
+                "StartTime": "2016-12-21 12:12:11",
+                "State": 1,
+                "Versions": 3,
+                "VersionsName": "版本名字"
+            },
+            {
+                "AdminID": 1,
+                "EndTime": "2016-12-21 12:12:11",
+                "FactoryName": "sdf",
+                "GameID": 1,
+                "GameToken": 1,
+                "JoinNum": 0,
+                "MaxJoinNum": 0,
+                "NickName": "管理员",
+                "StartTime": "2016-12-21 12:12:11",
+                "State": 1,
+                "Versions": 3,
+                "VersionsName": "版本名字"
+            }
+        ]
+    }
+}
