@@ -10,8 +10,8 @@ import router from "../router/index";
 //axios 配置
 axios.defaults.timeout = 5000;
 axios.defaults.baseURL = "/api";
-axios.defaults.headers["Content-Type"] =
-    "application/x-www-form-urlencoded;charset=UTF-8";
+axios.defaults.headers.post["Content-Type"] =
+    "application/x-www-form-urlencoded; charset=UTF-8";
 //http request 拦截器
 axios.interceptors.request.use(
     config => {
@@ -68,7 +68,7 @@ const http = {};
 ["post", "patch", "put"].forEach(method => {
     http[method] = function(url, data) {
         return new Promise((resolve, reject) => {
-            axios[method](url, data).then(
+            axios[method](url, qs.stringify(data)).then(
                 response => {
                     resolve(response.data);
                 },
