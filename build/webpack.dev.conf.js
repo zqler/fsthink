@@ -12,12 +12,10 @@ const express = require("express");
 const app = express();
 const router = express.Router();
 const bodyParser = require("body-parser");
+const querystring = require("querystring");
 app.use("/api", router);
 const user = require("../mock/user.json");
 const usersList = require("../mock/userslist.json");
-
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
 const HOST = process.env.HOST;
 const PORT = process.env.PORT && Number(process.env.PORT);
 
@@ -50,26 +48,24 @@ const devWebpackConfig = merge(baseWebpackConfig, {
             poll: config.dev.poll
         },
         //提供模拟接口
-        before(router) {
-            // app.use(function(req, res, next) {
-            //     var s =
-            //         "[" +
-            //         Date.now() +
-            //         "] :" +
-            //         req.url +
-            //         ";" +
-            //         req.header("Authorization"); //这个都没获取到
-            //     console.info(s);
-            //     next();
-            // });
-            router.post("/api/login", function(req, res) {
-                console.info(req.body);
+        before(app) {
+            //中间件
+            app.use(bodyParser.urlencoded({ extended: false }));
+            app.use(bodyParser.json());
+            //接口请求
+            app.post("/api/login", function(req, res) {
+                console.info(req.body.name);
+                //post  application/x-www-form-urlencoded
+                // req.on("data", data => {
+                //     console.info(querystring.parse(decodeURIComponent(data)).name);
+                // });
+                // post application/json
                 res.json(user);
             });
-            router.get("/api/loginOut", function(req, res) {
+            app.get("/api/loginOut", function(req, res) {
                 res.json(user);
             });
-            router.get("/api/usersList", function(req, res) {
+            app.get("/api/usersList", function(req, res) {
                 // console.info(req.query.name);
                 res.json(usersList);
             });

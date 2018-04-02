@@ -70,6 +70,7 @@
         "postcss-import": "^11.0.0",
         "postcss-loader": "^2.0.8",
         "qs": "^6.5.1",
+        "querystring": "^0.2.0",
         "rimraf": "^2.6.0",
         "sass-loader": "^6.0.6",
         "selenium-server": "^3.0.1",
