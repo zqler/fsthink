@@ -11,7 +11,11 @@ export default new Vuex.Store({
         token: null,
         title: "",
         isLogin: false,
-        aesKey: "xer"
+        aesKey: "xer",
+        loginInfo: {
+            isSuccess: false,
+            msg: ""
+        }
     },
 
     mutations: {
@@ -23,7 +27,7 @@ export default new Vuex.Store({
         },
         [login.LOGIN_FAIL](state, data) {
             state.loginInfo.isSuccess = true;
-            state.loginInfo.msg = data.errmsg;
+            state.loginInfo.msg = data;
         },
         [login.LOGOUT]: state => {
             sessionStorage.removeItem("token");

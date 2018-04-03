@@ -55,12 +55,18 @@ const devWebpackConfig = merge(baseWebpackConfig, {
             //接口请求
             app.post("/api/login", function(req, res) {
                 console.info(req.body.name);
+                const name = req.body.name;
+                const password = req.body.pwd;
                 //post  application/x-www-form-urlencoded
                 // req.on("data", data => {
                 //     console.info(querystring.parse(decodeURIComponent(data)).name);
                 // });
                 // post application/json
-                res.json(user);
+                if (name == "admin" && password == "admin") {
+                    res.json(user);
+                } else {
+                    res.json("用户名或者密码错误");
+                }
             });
             app.get("/api/loginOut", function(req, res) {
                 res.json(user);

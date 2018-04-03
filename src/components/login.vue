@@ -3,7 +3,7 @@
     <h3 class="h-title">{{msg}}</h3>
   <div class="login-page">
    <el-form :model="user" :rules="rules" ref="userLogin" label-width="100px" class="card-box login-form">
-     <span class="login-tips">{{tip}}</span>
+     <span class="login-tips">{{loginInfo.msg}}</span>
      <el-form-item label="用户名" prop="account">
        <el-input type="text" v-model="user.account" auto-complete="off" @change="accountChange">
        </el-input>
@@ -26,6 +26,7 @@
 import api from "../utils/api";
 import util from "../utils/util";
 import { mapState } from "vuex";
+import Vue from "vue";
 import { login } from "../store/types/login";
 export default {
   name: "login",
@@ -49,7 +50,7 @@ export default {
     // this.$store.commit(types.TITLE, "login");
   },
   computed: {
-    ...mapState(["aesKey"])
+    ...mapState(["loginInfo", "aesKey"])
   },
   methods: {
     accountChange() {
@@ -107,6 +108,8 @@ export default {
           //     this.tip = "用户名密码错误";
           //   }
           // });
+        } else {
+          store.commit(login.LOGIN_FAIL, { msg: "密码或用户名不能为空" });
         }
       });
     }
