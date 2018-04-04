@@ -5,46 +5,24 @@
     "resultData": {
         "title": "测试标题",
         "list": [{
-                "AdminID": 1,
-                "EndTime": "2016-12-21 12:12:11",
-                "FactoryName": "sdf",
-                "GameID": 1,
-                "GameToken": 1,
-                "JoinNum": 0,
-                "MaxJoinNum": 0,
-                "NickName": "管理员",
-                "StartTime": "2016-12-21 12:12:11",
-                "State": 1,
-                "Versions": 1,
-                "VersionsName": "版本名字"
+                "date": "2016-05-02",
+                "name": "王小龙",
+                "address": "上海市普陀区金沙江路 1518 弄"
             },
             {
-                "AdminID": 1,
-                "EndTime": "2016-12-21 12:12:11",
-                "FactoryName": "sdf",
-                "GameID": 1,
-                "GameToken": 1,
-                "JoinNum": 0,
-                "MaxJoinNum": 0,
-                "NickName": "管理员",
-                "StartTime": "2016-12-21 12:12:11",
-                "State": 1,
-                "Versions": 3,
-                "VersionsName": "版本名字"
+                "date": "2016-05-04",
+                "name": "王小虎",
+                "address": "上海市普陀区金沙江路 1517 弄"
             },
             {
-                "AdminID": 1,
-                "EndTime": "2016-12-21 12:12:11",
-                "FactoryName": "sdf",
-                "GameID": 1,
-                "GameToken": 1,
-                "JoinNum": 0,
-                "MaxJoinNum": 0,
-                "NickName": "管理员",
-                "StartTime": "2016-12-21 12:12:11",
-                "State": 1,
-                "Versions": 3,
-                "VersionsName": "版本名字"
+                "date": "2016-05-01",
+                "name": "jack",
+                "address": "上海市普陀区金沙江路 1519 弄"
+            },
+            {
+                "date": "2016-05-03",
+                "name": "liss",
+                "address": "上海市普陀区金沙江路 1516 弄"
             }
         ]
     }
