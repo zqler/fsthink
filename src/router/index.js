@@ -1,10 +1,16 @@
 import Vue from "vue";
 import Router from "vue-router";
 import store from "@/store/store";
-import login from "@/components/login";
-import NotFound from "@/components/NotFound";
-import register from "@/components/register";
-import home from "@/components/index";
+// import login from "@/components/login";
+// import NotFound from "@/components/NotFound";
+// import register from "@/components/register";
+// import home from "@/components/index";
+// 配合webpack 实现按需加载
+const home = r => require.ensure([], () => r(require('@/components/index.vue')));
+const login = r => require.ensure([], () => r(require('@/components/login.vue')));
+const register = r => require.ensure([], () => r(require('@/components/register.vue')));
+const NotFound = r => require.ensure([], () => r(require('@/components/NotFound.vue')));
+
 import List from "@/components/list";
 import vuex from "vuex";
 Vue.use(Router);
@@ -79,7 +85,9 @@ router.beforeEach((to, from, next) => {
             } else {
                 next({
                     path: "/login",
-                    query: { redirect: encodeURIComponent(to.path) } // 将跳转的路由path作为参数，登录成功后跳转到该路由
+                    query: {
+                        redirect: encodeURIComponent(to.path)
+                    } // 将跳转的路由path作为参数，登录成功后跳转到该路由
                 });
             }
         }

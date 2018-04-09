@@ -1,6 +1,7 @@
 <template>
   <div class="home">
    <h3>这是一个首页</h3>
+
        <el-table
     :data="users"
     style="width: 100%"
