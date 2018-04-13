@@ -49,7 +49,7 @@ export default {
     //  this.fetchData();
     // this.$store.commit(types.TITLE, "login");
   },
-  computed: {
+  computed: { //监听变化
     ...mapState(["loginInfo", "aesKey"])
   },
   methods: {
